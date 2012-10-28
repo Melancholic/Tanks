@@ -26,10 +26,9 @@ struct tank{
 	int get_x();
 	int get_y();
 	void sed_xy(int a, int b);
-    void SpecialKeyboard(int key,int x, int y);
-     void display();
-    void timer(int = 0);
-    void init();
 };
-//void display();
+void display();
+void SpecialKeyboard(int key,int x, int y);
+void timer(int = 0);
+void init();
 #endif

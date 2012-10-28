@@ -1,7 +1,6 @@
 #include"Tank.h"
-#include<functional>
+#include"functional"
 int main(int argc, char **argv){
-    tank Tank;
 	std::cout<<"\n****Tanks****\n";
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -13,8 +12,9 @@ int main(int argc, char **argv){
 	glMatrixMode(GL_PROJECTION);
 	glViewport(0,0,400,300);
 	gluOrtho2D(0.0, 400.0, 0.0, 300.0);
-	glutDisplayFunc(std::bind(&tank::display),&Tank);
-    Tank.init();
+//    boost::function <void()> f = boost::bind(&tank::display, Tank);
+	glutDisplayFunc(display);
+    init();
 	glutMainLoop();
 	std::cout<<"\n****END****\n";
 	return 0;

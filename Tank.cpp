@@ -1,10 +1,31 @@
 #include"Tank.h"
 tank Tank;
 
+void bang(){
+	if(Tank.zaryd.koord.x<20 ||Tank.zaryd.koord.x>380){
+		Tank.zaryd.koord.x=Tank.zaryd.koord.y=-100;
+		Tank.zaryd.fspeed=firespeed;
+	}
+       if(Tank.zaryd.koord.y<20 || Tank.zaryd.koord.y>280 ){
+                Tank.zaryd.koord.x=-100;Tank.zaryd.koord.y=-100;
+		Tank.zaryd.fspeed=firespeed;
+        }   
+
+	
+}
+
 void display(){
 	glPointSize(10);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POINTS);
+	bang();
+	if(Tank.zaryd.koord.x !=-100 && Tank.zaryd.koord.y !=-100){
+		glColor3f(.2,.5,.5);
+		glVertex2f(Tank.zaryd.koord.x, Tank.zaryd.koord.y);
+		Tank.ffly();
+		}
+                
+
 
 		glColor3f(.1, .1, 0);
 		for (int i = 20; i < 380; i++) glVertex2f(i, 20);
@@ -60,6 +81,9 @@ void SpecialKeyboard(int key,int x, int y){
             Tank.up(Tank.get_x(),  Tank.get_y());
         }
 	}
+	if(key==GLUT_KEY_PAGE_DOWN &&Tank.zaryd.koord.x==-100 && Tank.zaryd.koord.y==-100){
+	Tank.fprocessing=Tank.finit();
+	}
     
 }
 
@@ -78,10 +102,12 @@ void init(){
 tank::tank(){
 	koord.resize(tsize);
 	up(150,200);
+	zaryd.koord.x=zaryd.koord.y=-100;
 };
 tank::tank(int a, int b){
 	koord.resize(tsize);
 	up(a,b);
+	zaryd.koord.x=zaryd.koord.y=-100;
 };
 
 void tank::up(int a, int b){
@@ -155,4 +181,48 @@ void tank::sed_xy(int a,int b){
 	koord[1].x+=a;
 	koord[1].y+=b;
 }
+int tank::finit(){
+	switch(koord[0].x-koord[1].x){
+		case point:{
+		  zaryd.koord.x=koord[0].x+point;
+		  zaryd.koord.y=koord[0].y;
+		  return 1;};break;
+		case -point:{
+                  zaryd.koord.x=koord[0].x-point;
+                  zaryd.koord.y=koord[0].y;
+		zaryd.fspeed*=-1;
+		return 1;
+		};
+	}
+	switch(koord[0].y-koord[1].y){
+		case point:{
+                  zaryd.koord.x=koord[0].x;
+                  zaryd.koord.y=koord[0].y-point;
+			return 2;};break;
+		case -point:{
+                  zaryd.koord.x=koord[0].x;
+                  zaryd.koord.y=koord[0].y+point;
+			zaryd.fspeed*=-1;
+			return 2;
+		}
+	
+}
+return 0;
+}
+fire::fire(){
+	fspeed=firespeed;
+	koord.x=koord.y=-100;
+}
+void fire::reset(){
 
+	koord.x=koord.y=-100;
+        fspeed=firespeed;
+}
+void tank::ffly(){
+	if (fprocessing ==1){
+		zaryd.koord.x+=zaryd.fspeed;
+	}
+	if(fprocessing ==2){
+		zaryd.koord.y+=zaryd.fspeed;
+	}
+}
